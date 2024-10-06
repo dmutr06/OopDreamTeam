@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class ResultManager
 {
-    // Словарь для хранения результатов тестов по пользователям
+    
     private Dictionary<string, List<int>> userResults;
 
     public ResultManager()
@@ -11,7 +11,7 @@ public class ResultManager
         userResults = new Dictionary<string, List<int>>();
     }
 
-    // Метод для добавления результата теста пользователя
+    
     public void AddResult(string userName, int score)
     {
         if (!userResults.ContainsKey(userName))
@@ -21,7 +21,7 @@ public class ResultManager
         userResults[userName].Add(score);
     }
 
-    // Метод для получения среднего результата пользователя
+    
     public double GetAverageScore(string userName)
     {
         if (userResults.ContainsKey(userName) && userResults[userName].Count > 0)
@@ -39,7 +39,7 @@ public class ResultManager
         }
     }
 
-    // Метод для вывода всех результатов пользователя
+   
     public void PrintUserResults(string userName)
     {
         if (userResults.ContainsKey(userName))
