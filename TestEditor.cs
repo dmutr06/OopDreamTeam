@@ -5,7 +5,6 @@ namespace OopDreamTeam
         public string Text { get; set; }
         public List<string> Options { get; set; }
         public int CorrectAnswerIndex { get; set; }
-        public int SelectedAnswerIndex { get; set; }
 
         public Question(string text, List<string> options, int correctAnswerIndex)
         {
@@ -13,58 +12,58 @@ namespace OopDreamTeam
             Options = options;
             CorrectAnswerIndex = correctAnswerIndex;
         }
-
-        public bool IsCorrect()
-        {
-            return SelectedAnswerIndex == CorrectAnswerIndex;
-        }
-    }
-    
-    public class CheckTest
-    {
-        public string TestName { get; set; }
-        public List<Question> Questions { get; set; } = new List<Question>();
-
-        public CheckTest(string testName)
-        {
-            TestName = testName;
-        }
-
-        public void AddQuestion(Question question)
-        {
-            Questions.Add(question);
-        }
     }
 
     public class TestEditor
     {
-        private List<CheckTest> tests = new List<CheckTest>();
+        private List<string> testNames = new List<string>();
+        private Dictionary<string, List<Question>> tests = new Dictionary<string, List<Question>>();
 
-        public void AddTest(CheckTest test)
+        public void AddTest(string testName)
         {
-            tests.Add(test);
-        }
-    }
-
-    public class TestSession
-    {
-        private CheckTest test;
-        private int currentQuestionIndex;
-
-        public TestSession(CheckTest test)
-        {
-            this.test = test;
-            currentQuestionIndex = 0;
-        }
-
-        public Question GetNextQuestion()
-        {
-            if (currentQuestionIndex < test.Questions.Count)
+            if (!testNames.Contains(testName))
             {
-                return test.Questions[currentQuestionIndex++];
+                testNames.Add(testName);
+                tests[testName] = new List<Question>();
+                Console.WriteLine($"Test '{testName}' added");
             }
+            else
+            {
+                Console.WriteLine("Test already exists");
+            }
+        }
 
-            return null;
+        public void AddQuestionToTest(string testName, Question question)
+        {
+            if (tests.ContainsKey(testName))
+            {
+                tests[testName].Add(question);
+                Console.WriteLine($"Question added in test '{testName}'");
+            }
+            else
+            {
+                Console.WriteLine($"Test '{testName}' wasn`t found");
+            }
+        }
+
+        public void DisplayTestQuestions(string testName)
+        {
+            if (tests.ContainsKey(testName))
+            {
+                Console.WriteLine($"Test questions to '{testName}'");
+                foreach (var question in tests[testName])
+                {
+                    Console.WriteLine($"- {question.Text}");
+                    for (int i = 0; i < question.Options.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {question.Options[i]}");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Test '{testName}' wasn`t found");
+            }
         }
     }
 }
@@ -75,7 +74,11 @@ namespace OopDreamTeam.Tests
     {
         public static void Run()
         {
-            CheckTest test = new CheckTest("Sample Test");
+            TestEditor editor = new TestEditor();
+            
+            Console.Write("Write test name: ");
+            string testName = Console.ReadLine();
+            editor.AddTest(testName);
         
             while (true)
             {
@@ -93,26 +96,10 @@ namespace OopDreamTeam.Tests
                 Console.Write("Введіть номер правильної відповіді: ");
                 int correctAnswerIndex = int.Parse(Console.ReadLine());
 
-                test.AddQuestion(new Question(questionText, options, correctAnswerIndex));
+                Question question = new Question(questionText, options, correctAnswerIndex);
+                editor.AddQuestionToTest(testName, question);
             }
-        
-            TestEditor manager = new TestEditor();
-            manager.AddTest(test);
-        
-            TestSession session = new TestSession(test);
-        
-            Question currentQuestion;
-            while ((currentQuestion = session.GetNextQuestion()) != null)
-            {
-                Console.WriteLine(currentQuestion.Text);
-                for (int i = 0; i < currentQuestion.Options.Count; i++)
-                {
-                    Console.WriteLine($"{i}. {currentQuestion.Options[i]}");
-                }
-
-                int selectedAnswer = int.Parse(Console.ReadLine());
-                currentQuestion.SelectedAnswerIndex = selectedAnswer; 
-            }
+            editor.DisplayTestQuestions(testName);
         }
     }
 }
