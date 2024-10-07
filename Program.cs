@@ -4,9 +4,9 @@
     {
 
         OopDreamTeam.Tests.TestTest.Run();
-        OopDreamTeam.Tests.TestTest.Run(); 
+        Console.WriteLine("----------");
         OopDreamTeam.Tests.TestEditorTest.Run();
+        Console.WriteLine("----------");
         OopDreamTeam.Results.TestResult.Run(); 
-
     }
 }
