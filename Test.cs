@@ -19,11 +19,13 @@ namespace OopDreamTeam
 
     public class Test
     {
+        public string Name { get; }
         private List<TempQuestion> questions;
         private string[] answers;
 
-        public Test(List<TempQuestion> questions)
+        public Test(string name, List<TempQuestion> questions)
         {
+            Name = name;
             this.questions = questions;
             answers = new string[questions.Count];
         }
@@ -60,8 +62,14 @@ namespace OopDreamTeam.Tests {
     class TestTest {
         public static void Run() {
             Console.WriteLine("Testing Test class:");
-            Console.WriteLine("Test class should return 3 when all answers are correct\n");
-            Test test = new Test(new List<TempQuestion>
+            ResultShouldBe3();
+            TestShouldThrowException();
+        } 
+
+        private static void ResultShouldBe3() 
+        {
+            Console.Write("Test class should return 3 when all answers are correct: ");
+            Test test = new Test("Capitals", new List<TempQuestion>
             {
                 new TempQuestion("What is the capital of France?", "Paris"),
                 new TempQuestion("What is the capital of Germany?", "Berlin"),
@@ -72,11 +80,31 @@ namespace OopDreamTeam.Tests {
             test.AddAnswer("Berlin", 1);
             test.AddAnswer("Rome", 2);
 
-            if (test.CheckAnswers() == 3) {
+            if (test.CheckAnswers() == 3) 
+            {
                 Console.WriteLine("Test passed");
-            } else {
+            } 
+            else 
+            {
                 Console.WriteLine("Test failed");
             }
-        } 
+        }
+
+        private static void TestShouldThrowException()
+        {
+            Console.Write("Test class should throw an exception: ");
+            Test test = new Test("Test", new List<TempQuestion>());
+
+            try
+            {
+                test.AddAnswer("A", 1);
+            } catch
+            {
+                Console.WriteLine("Test passed");
+                return;
+            }
+
+            Console.WriteLine("Test failed");
+        }
     }
 }
