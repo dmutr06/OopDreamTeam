@@ -3,5 +3,6 @@
     static void Main(string[] args)
     {
         OopDreamTeam.Tests.TestTest.Run(); // DJNVKDJNFV
+        OopDreamTeam.Tests.TestEditorTest.Run();
     }
 }
