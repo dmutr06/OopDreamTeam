@@ -65,6 +65,20 @@ namespace OopDreamTeam
                 Console.WriteLine($"Test '{testName}' wasn`t found");
             }
         }
+
+        public void RemoveTest(string testName)
+        {
+            if (tests.ContainsKey(testName))
+            {
+                tests.Remove(testName);
+                testNames.Remove(testName);
+                Console.WriteLine($"Test {testName} has been removed");
+            }
+            else
+            {
+                Console.WriteLine($"Test {testName} wasn`t found");
+            }
+        }
     }
 }
 
@@ -82,24 +96,28 @@ namespace OopDreamTeam.Tests
         
             while (true)
             {
-                Console.WriteLine("Додати запитання? (так/ні)");
+                Console.WriteLine("Add a question? (yes/no)");
                 string addQuestion = Console.ReadLine();
-                if (addQuestion.ToLower() != "так")
+                if (addQuestion.ToLower() != "yes")
                     break;
 
-                Console.Write("Введіть текст запитання: ");
+                Console.Write("Enter the text of the question: ");
                 string questionText = Console.ReadLine();
 
-                Console.Write("Введіть варіанти відповідей через кому: ");
+                Console.Write("Enter the answer choices separated by commas: ");
                 List<string> options = Console.ReadLine().Split(',').ToList();
 
-                Console.Write("Введіть номер правильної відповіді: ");
+                Console.Write("Enter the num of the correct answer: ");
                 int correctAnswerIndex = int.Parse(Console.ReadLine());
 
                 Question question = new Question(questionText, options, correctAnswerIndex);
                 editor.AddQuestionToTest(testName, question);
             }
             editor.DisplayTestQuestions(testName);
+            
+            Console.WriteLine("Enter the name of the test to be deleted: ");
+            string testToRemove = Console.ReadLine();
+            editor.RemoveTest(testToRemove);
         }
     }
 }
