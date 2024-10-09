@@ -57,7 +57,7 @@ namespace OopDreamTeam.Tests {
             manager.AddQuestion(question1);
             manager.AddQuestion(question2);
 
-            Console.WriteLine("\nTesting Question class:\n");
+            Console.WriteLine("Testing Question class:\n");
 
             Console.WriteLine($"Added questions:\n1. {question1.Text}\n2. {question2.Text}\n");
 
