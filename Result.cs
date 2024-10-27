@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class ResultManager
 {
+    
     private Dictionary<string, List<int>> userResults;
 
     public ResultManager()
@@ -10,6 +11,7 @@ public class ResultManager
         userResults = new Dictionary<string, List<int>>();
     }
 
+    
     public void AddResult(string userName, int score)
     {
         if (!userResults.ContainsKey(userName))
@@ -19,6 +21,7 @@ public class ResultManager
         userResults[userName].Add(score);
     }
 
+    
     public double GetAverageScore(string userName)
     {
         if (userResults.ContainsKey(userName) && userResults[userName].Count > 0)
@@ -32,10 +35,11 @@ public class ResultManager
         }
         else
         {
-            throw new ArgumentException("User not found or no results.");
+            throw new Exception("User not found or no results.");
         }
     }
 
+   
     public void PrintUserResults(string userName)
     {
         if (userResults.ContainsKey(userName))
@@ -53,38 +57,3 @@ public class ResultManager
     }
 }
 
-namespace OopDreamTeam.Results
-{
-    class TestResult
-    {
-        public static void Run()
-        {
-            ResultManager resultManager = new ResultManager();
-
-            resultManager.AddResult("Alice", 85);
-            resultManager.AddResult("Alice", 90);
-            resultManager.AddResult("Alice", 78);
-
-            resultManager.AddResult("Bob", 65);
-            resultManager.AddResult("Bob", 70);
-            resultManager.AddResult("Charlie", 95);
-
-            try
-            {
-                Console.WriteLine("Average score for Alice: " + resultManager.GetAverageScore("Alice"));
-                Console.WriteLine("Average score for Bob: " + resultManager.GetAverageScore("Bob"));
-                Console.WriteLine("Average score for Charlie: " + resultManager.GetAverageScore("Charlie"));
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            resultManager.PrintUserResults("Alice");
-            resultManager.PrintUserResults("Bob");
-            resultManager.PrintUserResults("Charlie");
-
-            resultManager.PrintUserResults("David");
-        }
-    }
-}
