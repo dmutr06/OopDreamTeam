@@ -1,29 +1,12 @@
 namespace OopDreamTeam
 {
-    public class TempQuestion
-    {
-        public string Text { get; set; }
-        public string Answer { get; set; }
-
-        public TempQuestion(string text, string answer)
-        {
-            Text = text;
-            Answer = answer;
-        }
-
-        public bool Validate(string answer)
-        {
-            return answer == Answer;
-        }
-    }
-
     public class Test
     {
         public string Name { get; }
-        private List<TempQuestion> questions;
+        private readonly List<BaseQuestion> questions;
         private string[] answers;
 
-        public Test(string name, List<TempQuestion> questions)
+        public Test(string name, List<BaseQuestion> questions)
         {
             Name = name;
             this.questions = questions;
@@ -47,7 +30,7 @@ namespace OopDreamTeam
             {
                 if (answers[i] == null) continue;
 
-                if (questions[i].Validate(answers[i]))
+                if (questions[i].CheckAnswer(answers[i]))
                 {
                     score++;
                 }
