@@ -1,79 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace OopDreamTeam {
-
-    public class BaseQuestion {
+namespace OopDreamTeam
+{
+    public abstract class BaseQuestion
+    {
         public string Text { get; set; }
-        public string Answer { get; set; }
+        public double Score { get; set; }
 
-        public BaseQuestion(string text, string answer) {
-            Text = text;
-            Answer = answer;
+        protected BaseQuestion(string text, double score)
+        {
+            Text = text ?? throw new ArgumentNullException(nameof(text), "Question text cannot be null.");
+            Score = score;
         }
 
-        public bool CheckAnswer(string userAnswer) {
-            return Answer.Equals(userAnswer, StringComparison.OrdinalIgnoreCase);
-        }
+        public abstract double CheckAnswer(List<int> userAnswerIndices);
     }
 
-    public class QuestionManager {
-        private static QuestionManager _instance;
-        private List<BaseQuestion> questions;
+    public class CheckboxAnswerEvaluator
+    {
+        private readonly bool strictGrading;
 
-        private QuestionManager() {
-            questions = new List<BaseQuestion>();
+        public CheckboxAnswerEvaluator(bool strictGrading)
+        {
+            this.strictGrading = strictGrading;
         }
 
-        public static QuestionManager Instance {
-            get {
-                if (_instance == null)
-                {
-                    _instance = new QuestionManager();
-                }
-                return _instance;
+        public double Evaluate(HashSet<int> correctAnswerIndices, List<int> userAnswerIndices, double maxScore)
+        {
+            int totalCorrect = correctAnswerIndices.Count;
+            int selectedCorrect = userAnswerIndices.Count(userIndex => correctAnswerIndices.Contains(userIndex));
+            int selectedIncorrect = userAnswerIndices.Count(userIndex => !correctAnswerIndices.Contains(userIndex));
+
+            if (strictGrading)
+            {
+                return (selectedCorrect == totalCorrect && selectedIncorrect == 0) ? maxScore : 0;
+            }
+            else
+            {
+                double scorePerCorrect = maxScore / totalCorrect;
+                double scorePerIncorrect = maxScore / totalCorrect;
+
+                double score = selectedCorrect * scorePerCorrect - selectedIncorrect * scorePerIncorrect;
+                return Math.Max(0, Math.Round(score, 2));
             }
         }
-
-        public void AddQuestion(BaseQuestion question) {
-            questions.Add(question);
-        }
-
-        public List<BaseQuestion> GetAllQuestions() {
-            return questions;
-        }
     }
-}
 
-namespace OopDreamTeam.Tests {
-    public class TestQuestion {
-        public static void Run() {
+    public class CheckboxQuestion : BaseQuestion
+    {
+        private HashSet<int> correctAnswerIndices;
+        private CheckboxAnswerEvaluator evaluator;
+        private int nextOptionIndex = 0;
+        private bool hasCorrectAnswer = false;
 
-            QuestionManager manager = QuestionManager.Instance;
+        public CheckboxQuestion(string text, double score, bool strictGrading)
+            : base(text, score)
+        {
+            correctAnswerIndices = new HashSet<int>();
+            evaluator = new CheckboxAnswerEvaluator(strictGrading);
+        }
 
-            BaseQuestion question1 = new BaseQuestion("What is the largest planet in our solar system?", "Jupiter");
-            BaseQuestion question2 = new BaseQuestion("In which year did the Titanic sink?", "1912");
+        public int AddOption(bool isCorrect)
+        {
+            int index = nextOptionIndex++;
 
-            manager.AddQuestion(question1);
-            manager.AddQuestion(question2);
+            if (isCorrect)
+            {
+                correctAnswerIndices.Add(index);
+                hasCorrectAnswer = true;
+            }
 
-            Console.WriteLine("Testing Question class:\n");
+            return index;
+        }
 
-            Console.WriteLine($"Added questions:\n1. {question1.Text}\n2. {question2.Text}\n");
+        public override double CheckAnswer(List<int> userAnswerIndices)
+        {
+            if (!hasCorrectAnswer)
+            {
+                throw new InvalidOperationException("Cannot evaluate answer: question has no correct answers.");
+            }
 
-            List<BaseQuestion> questions = manager.GetAllQuestions();
-            Console.WriteLine($"Number of questions in the manager: {questions.Count} (Expected: 2)\n");
+            return evaluator.Evaluate(correctAnswerIndices, userAnswerIndices, Score);
+        }
 
-            Console.WriteLine($"Testing question: \"{question1.Text}\"");
-            Console.WriteLine($"User answer: \"Jupiter\", Expected: True, Actual: {question1.CheckAnswer("Jupiter")}");
-            Console.WriteLine($"User answer: \"jUpiTer\", Expected: True, Actual: {question1.CheckAnswer("jUpiTer")}");
-            Console.WriteLine($"User answer: \"Saturn\", Expected: False, Actual: {question1.CheckAnswer("Saturn")}\n");
-
-            Console.WriteLine($"Testing question: \"{question2.Text}\"");
-            Console.WriteLine($"User answer: \"1912\", Expected: True, Actual: {question2.CheckAnswer("1912")}");
-            Console.WriteLine($"User answer: \"1911\", Expected: False, Actual: {question2.CheckAnswer("1911")}\n");
-
-            Console.WriteLine("All tests completed.");
+        public List<int> GetOptionIndices()
+        {
+            return Enumerable.Range(0, nextOptionIndex).ToList();
         }
     }
 }
