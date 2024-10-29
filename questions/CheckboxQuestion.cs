@@ -41,18 +41,21 @@ namespace OopDreamTeam
 
             double pmax = Score;
 
-            int nmax = 0;
-            int kmax = 0;
+            int nmax = Options.Count(option => option.IsRight);
+            int kmax = Options.Count - nmax;
+
             int n = 0;
             int k = 0;
 
             for (int i = 0; i < Options.Count; i++)
             {
-                if (Options[i].IsRight) nmax++;
-                else kmax++;
-
-                if (userAnswer[i] && Options[i].IsRight) n++;
-                else if (userAnswer[i] && !Options[i].IsRight) k++;
+                if (userAnswer[i])
+                {
+                    if (Options[i].IsRight)
+                        n++;
+                    else
+                        k++;
+                }
             }
 
             if (strictGrading)
