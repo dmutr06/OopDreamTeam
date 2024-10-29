@@ -1,43 +1,38 @@
-namespace OopDreamTeam
+namespace OopDreamTeam;
+
+public class Test
 {
-    public class Test
+    public string Name { get; }
+    private readonly List<CheckboxQuestion> questions;
+    private List<bool>[] answers;
+
+    public Test(string name, List<CheckboxQuestion> questions)
     {
-        public string Name { get; }
-        private readonly List<BaseQuestion> questions;
-        private string[] answers;
+        Name = name;
+        this.questions = questions;
+        answers = new List<bool>[questions.Count];
+    }
 
-        public Test(string name, List<BaseQuestion> questions)
+    public void AddAnswer(List<bool> answer, int index)
+    {
+        if (index >= questions.Count)
         {
-            Name = name;
-            this.questions = questions;
-            answers = new string[questions.Count];
+            throw new IndexOutOfRangeException();
         }
 
-        public void AddAnswer(string answer, int index)
-        {
-            if (index >= questions.Count)
-            {
-                throw new IndexOutOfRangeException();
-            }
+        answers[index] = answer;
+    }
 
-            answers[index] = answer;
+    public double CheckAnswers()
+    {
+        double score = 0;
+        for (int i = 0; i < questions.Count; i++)
+        {
+            if (answers[i] == null) continue;
+
+        score += questions[i].CheckAnswer(answers[i]);
         }
 
-        public int CheckAnswers()
-        {
-            int score = 0;
-            for (int i = 0; i < questions.Count; i++)
-            {
-                if (answers[i] == null) continue;
-
-                if (questions[i].CheckAnswer(answers[i]))
-                {
-                    score++;
-                }
-            }
-
-            return score;
-        }
+        return score;
     }
 }
-
