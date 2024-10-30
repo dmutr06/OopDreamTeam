@@ -2,6 +2,7 @@ namespace OopDreamTeam.Tests;
 
 using NUnit.Framework;
 
+
 public class TestTestEditor
 {
     private TestEditor editor;
@@ -18,7 +19,7 @@ public class TestTestEditor
         string testName = "SampleTest";
         editor.AddTest(testName);
         
-        Assert.That(() => editor.DisplayTestQuestions(testName), Throws.Nothing);
+        Assert.That(() => editor.GetTest(testName), Throws.Nothing);
     }
 
     [Test]
@@ -35,16 +36,24 @@ public class TestTestEditor
     { 
         string testName = "TestWithQuestions";
         editor.AddTest(testName);
+        
+        List<CheckboxQuestion.Option> options = new  List<CheckboxQuestion.Option>
+        {
+            new CheckboxQuestion.Option("Option1", false),
+            new CheckboxQuestion.Option("Option2", true),
+            new CheckboxQuestion.Option("Option3", false)
+        };
 
-        Question question = new Question(
+        CheckboxQuestion question = new CheckboxQuestion(
             "Sample Question?", 
-            new List<string>{"Option1", "Option2", "Option3"}, 
-            1
+            1, 
+            options, 
+            strictGrading: false 
         );
         
         editor.AddQuestionToTest(testName, question);
         
-        Assert.DoesNotThrow(() => editor.DisplayTestQuestions(testName));
+        Assert.DoesNotThrow(() => editor.GetTest(testName));
     }
 
     [Test]
@@ -52,10 +61,18 @@ public class TestTestEditor
     {
         string nonExistenTest = "nonExistenTest";
         
-        Question question = new Question(
-            "Sample Question?", 
-            new List<string>{"Option1", "Option2", "Option3"}, 
-            1
+        List<CheckboxQuestion.Option> options = new  List<CheckboxQuestion.Option>
+        {
+            new CheckboxQuestion.Option("Option1", false),
+            new CheckboxQuestion.Option("Option2", true),
+            new CheckboxQuestion.Option("Option3", false)
+        };
+        
+        CheckboxQuestion question = new CheckboxQuestion(
+            "Sample Question?",
+            1, 
+            options, 
+            strictGrading: false 
         );
 
         Assert.Throws<KeyNotFoundException>(() => editor.AddQuestionToTest(nonExistenTest, question));
@@ -69,7 +86,7 @@ public class TestTestEditor
         
         editor.RemoveTest(testName);
 
-        Assert.Throws<KeyNotFoundException>(() => editor.DisplayTestQuestions(testName));
+        Assert.Throws<KeyNotFoundException>(() => editor.GetTest(testName));
     }
 
     [Test]
