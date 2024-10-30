@@ -13,14 +13,12 @@ public class Test
         answers = new List<bool>[questions.Count];
     }
 
-    public void AddAnswer(List<bool> answer, int index)
+    public void AddAnswer(List<bool> answer, int idx)
     {
-        if (index >= questions.Count)
-        {
+        if (idx >= questions.Count)
             throw new IndexOutOfRangeException();
-        }
 
-        answers[index] = answer;
+        answers[idx] = answer;
     }
 
     public double CheckAnswers()
@@ -34,5 +32,13 @@ public class Test
         }
 
         return score;
+    }
+
+    public CheckboxQuestion GetQuestion(int idx)
+    {
+        if (idx >= questions.Count)
+            throw new IndexOutOfRangeException();
+
+        return questions[idx];
     }
 }

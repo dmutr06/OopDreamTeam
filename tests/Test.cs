@@ -4,24 +4,20 @@ using NUnit.Framework;
 
 public class TestTest
 {
-    private Test test = new Test("", new List<CheckboxQuestion>());
+    private Test test = new Test(string.Empty, new List<CheckboxQuestion>());
+    private List<CheckboxQuestion> questions = new List<CheckboxQuestion>
+    {
+        new CheckboxQuestion(
+            "question", 2, 
+            new List<CheckboxQuestion.Option>
+            {
+                new CheckboxQuestion.Option("1 option", true),
+                new CheckboxQuestion.Option("2 option", true),
+            }, false),
+    };
 
     [SetUp]
-    public void Setup()
-    {
-        test = new Test("test", new List<CheckboxQuestion> 
-            {
-                new CheckboxQuestion(
-                        "question", 2, 
-                        new List<CheckboxQuestion.Option>
-                        {
-                            new CheckboxQuestion.Option("1 option", true),
-                            new CheckboxQuestion.Option("2 option", true),
-                        }, false),
-            }
-        );
-
-    }
+    public void Setup() => test = new Test("test", questions);
 
     [Test]
     public void CheckAnswers_ShouldReturn1()
@@ -31,9 +27,16 @@ public class TestTest
     }
 
     [Test]
-    public void AddAnswer_ShouldThrowError() {
+    public void AddAnswer_ShouldThrowError() 
+    {
       Assert.Throws<IndexOutOfRangeException>(
           () => test.AddAnswer(new List<bool>(), 1)
       );
+    }
+
+    [Test]
+    public void GetQuestion_ShouldReturnFirstQuestion()
+    {
+        Assert.That(test.GetQuestion(0), Is.EqualTo(questions[0]));
     }
 }
