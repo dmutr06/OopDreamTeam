@@ -5,53 +5,50 @@ namespace OopDreamTeam
 {
     public class ResultManager
     {
-
-        private Dictionary<string, List<int>> userResults;
+        private Dictionary<string, List<Test>> userResults;
 
         public ResultManager()
         {
-            userResults = new Dictionary<string, List<int>>();
+            userResults = new Dictionary<string, List<Test>>();
         }
 
-
-        public void AddResult(string userName, int score)
+        public void AddTest(string userName, Test test)
         {
             if (!userResults.ContainsKey(userName))
             {
-                userResults[userName] = new List<int>();
+                userResults[userName] = new List<Test>();
             }
-
-            userResults[userName].Add(score);
+            userResults[userName].Add(test);
         }
-
 
         public double GetAverageScore(string userName)
         {
             if (userResults.ContainsKey(userName) && userResults[userName].Count > 0)
             {
-                double sum = 0;
-                foreach (int score in userResults[userName])
+                double totalScore = 0;
+                int numberOfTests = userResults[userName].Count;
+
+                foreach (var test in userResults[userName])
                 {
-                    sum += score;
+                    totalScore += test.CheckAnswers();
                 }
 
-                return sum / userResults[userName].Count;
+                return totalScore / numberOfTests;
             }
             else
             {
-                throw new Exception("User not found or no results.");
+                throw new Exception("User not found or no results available.");
             }
         }
-
 
         public void PrintUserResults(string userName)
         {
             if (userResults.ContainsKey(userName))
             {
                 Console.WriteLine($"Results for {userName}:");
-                foreach (int score in userResults[userName])
+                foreach (var test in userResults[userName])
                 {
-                    Console.WriteLine($" - Score: {score}");
+                    Console.WriteLine($" - Test: {test.Name}, Score: {test.CheckAnswers()}");
                 }
             }
             else
@@ -61,4 +58,5 @@ namespace OopDreamTeam
         }
     }
 }
+
 
