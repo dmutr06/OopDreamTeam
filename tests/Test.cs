@@ -8,7 +8,7 @@ public class TestTest
     private List<CheckboxQuestion> questions = new List<CheckboxQuestion>
     {
         new CheckboxQuestion(
-            "question", 2, 
+            "question", 2,
             new List<CheckboxQuestion.Option>
             {
                 new CheckboxQuestion.Option("1 option", true),
@@ -27,11 +27,11 @@ public class TestTest
     }
 
     [Test]
-    public void AddAnswer_ShouldThrowError() 
+    public void AddAnswer_ShouldThrowError()
     {
-      Assert.Throws<IndexOutOfRangeException>(
-          () => test.AddAnswer(new List<bool>(), 1)
-      );
+        Assert.Throws<IndexOutOfRangeException>(
+            () => test.AddAnswer(new List<bool>(), 1)
+        );
     }
 
     [Test]

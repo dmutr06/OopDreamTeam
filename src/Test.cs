@@ -28,7 +28,7 @@ public class Test
         {
             if (answers[i] == null) continue;
 
-        score += questions[i].CheckAnswer(answers[i]);
+            score += questions[i].CheckAnswer(answers[i]);
         }
 
         return score;

@@ -29,7 +29,7 @@ namespace OopDreamTeam
                 throw new KeyNotFoundException($"Test '{testName}' wasn't found.");
             }
         }
-        
+
         public void RemoveTest(string testName)
         {
             if (tests.ContainsKey(testName))

@@ -19,7 +19,7 @@ public class ResultManagerTests
     public void AddTest_ShouldAddNewTest()
     {
         string userName = "User1";
-        var questions = new List<CheckboxQuestion>(); 
+        var questions = new List<CheckboxQuestion>();
         var test = new Test("SampleTest", questions);
 
         resultManager.AddTest(userName, test);
@@ -31,18 +31,18 @@ public class ResultManagerTests
     public void GetAverageScore_ShouldReturnCorrectAverage()
     {
         string userName = "User2";
-        var questions1 = new List<CheckboxQuestion>(); 
+        var questions1 = new List<CheckboxQuestion>();
         var test1 = new Test("Test1", questions1);
-        
-        var questions2 = new List<CheckboxQuestion>(); 
+
+        var questions2 = new List<CheckboxQuestion>();
         var test2 = new Test("Test2", questions2);
 
         resultManager.AddTest(userName, test1);
         resultManager.AddTest(userName, test2);
-        
+
         double averageScore = resultManager.GetAverageScore(userName);
-        
-        Assert.AreEqual(0, averageScore); 
+
+        Assert.AreEqual(0, averageScore);
     }
 
     [Test]
@@ -57,7 +57,7 @@ public class ResultManagerTests
     public void PrintUserResults_ShouldPrintResultsForExistingUser()
     {
         string userName = "User3";
-        var questions = new List<CheckboxQuestion>(); 
+        var questions = new List<CheckboxQuestion>();
         var test = new Test("Test3", questions);
 
         resultManager.AddTest(userName, test);
