@@ -2,7 +2,7 @@ namespace OopDreamTeam;
 
 public class Test
 {
-    public string Name { get; }
+    public readonly string Name;
     private readonly List<CheckboxQuestion> questions;
     private List<bool>[] answers;
 
