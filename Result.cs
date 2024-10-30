@@ -1,114 +1,63 @@
 using System;
 using System.Collections.Generic;
 
-public class ResultManager
+namespace OopDreamTeam
 {
-    
-    private Dictionary<string, List<int>> userResults;
-
-    public ResultManager()
+    public class ResultManager
     {
-<<<<<<< HEAD
-        userResults = new Dictionary<string, List<int>>();
-    }
 
-    
-    public void AddResult(string userName, int score)
-    {
-        if (!userResults.ContainsKey(userName))
-        {
-            userResults[userName] = new List<int>();
-=======
-        private Dictionary<string, List<Test>> userResults;
+        private Dictionary<string, List<int>> userResults;
 
         public ResultManager()
         {
-            userResults = new Dictionary<string, List<Test>>();
->>>>>>> Result
+            userResults = new Dictionary<string, List<int>>();
         }
-        userResults[userName].Add(score);
-    }
 
-<<<<<<< HEAD
-    
-    public double GetAverageScore(string userName)
-    {
-        if (userResults.ContainsKey(userName) && userResults[userName].Count > 0)
-=======
-        public void AddTest(string userName, Test test)
->>>>>>> Result
-        {
-            double sum = 0;
-            foreach (int score in userResults[userName])
-            {
-<<<<<<< HEAD
-                sum += score;
-            }
-            return sum / userResults[userName].Count;
-        }
-        else
-        {
-            throw new Exception("User not found or no results.");
-        }
-    }
 
-   
-    public void PrintUserResults(string userName)
-    {
-        if (userResults.ContainsKey(userName))
+        public void AddResult(string userName, int score)
         {
-            Console.WriteLine($"Results for {userName}:");
-            foreach (int score in userResults[userName])
+            if (!userResults.ContainsKey(userName))
             {
-                Console.WriteLine($" - Score: {score}");
+                userResults[userName] = new List<int>();
             }
+
+            userResults[userName].Add(score);
         }
-        else
-        {
-            Console.WriteLine($"No results found for user: {userName}");
-=======
-                userResults[userName] = new List<Test>();
-            }
-            userResults[userName].Add(test);
-        }
+
 
         public double GetAverageScore(string userName)
         {
             if (userResults.ContainsKey(userName) && userResults[userName].Count > 0)
             {
-                double totalScore = 0;
-                int numberOfTests = userResults[userName].Count;
-
-                foreach (var test in userResults[userName])
+                double sum = 0;
+                foreach (int score in userResults[userName])
                 {
-                    totalScore += test.CheckAnswers();
+                    sum += score;
                 }
 
-                return totalScore / numberOfTests;
+                return sum / userResults[userName].Count;
             }
             else
             {
-                throw new Exception("User not found or no results available.");
+                throw new Exception("User not found or no results.");
             }
         }
+
 
         public void PrintUserResults(string userName)
         {
             if (userResults.ContainsKey(userName))
             {
                 Console.WriteLine($"Results for {userName}:");
-                foreach (var test in userResults[userName])
+                foreach (int score in userResults[userName])
                 {
-                    Console.WriteLine($" - Test: {test.Name}, Score: {test.CheckAnswers()}");
+                    Console.WriteLine($" - Score: {score}");
                 }
             }
             else
             {
                 Console.WriteLine($"No results found for user: {userName}");
             }
->>>>>>> Result
         }
     }
 }
-
-
