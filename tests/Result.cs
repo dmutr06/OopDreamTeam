@@ -4,63 +4,70 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-public class TestResult 
+[TestFixture]
+public class ResultManagerTests
 {
-    [Test]
-    public void AddResult_ShouldStoreResultsCorrectly()
+    private ResultManager resultManager;
+
+    [SetUp]
+    public void Setup()
     {
-        ResultManager resultManager = new ResultManager();
-
-        resultManager.AddResult("Alice", 85);
-        resultManager.AddResult("Alice", 90);
-
-        double average = resultManager.GetAverageScore("Alice");
-        Assert.That(average, Is.EqualTo(87.5));
+        resultManager = new ResultManager();
     }
 
     [Test]
-    public void GetAverageScore_ShouldThrowExceptionForUnknownUser()
+    public void AddTest_ShouldAddNewTest()
     {
-        ResultManager resultManager = new ResultManager();
+        string userName = "User1";
+        var questions = new List<CheckboxQuestion>(); 
+        var test = new Test("SampleTest", questions);
 
-        Assert.Throws<Exception>(() => resultManager.GetAverageScore("UnknownUser"));
+        resultManager.AddTest(userName, test);
+
+        Assert.DoesNotThrow(() => resultManager.PrintUserResults(userName));
     }
 
     [Test]
     public void GetAverageScore_ShouldReturnCorrectAverage()
     {
-        ResultManager resultManager = new ResultManager();
+        string userName = "User2";
+        var questions1 = new List<CheckboxQuestion>(); 
+        var test1 = new Test("Test1", questions1);
+        
+        var questions2 = new List<CheckboxQuestion>(); 
+        var test2 = new Test("Test2", questions2);
 
-        resultManager.AddResult("Bob", 60);
-        resultManager.AddResult("Bob", 80);
-        resultManager.AddResult("Bob", 70);
-
-        double average = resultManager.GetAverageScore("Bob");
-        Assert.That(average, Is.EqualTo(70.0));
+        resultManager.AddTest(userName, test1);
+        resultManager.AddTest(userName, test2);
+        
+        double averageScore = resultManager.GetAverageScore(userName);
+        
+        Assert.AreEqual(0, averageScore); 
     }
 
     [Test]
-    public void GetUserResults_ShouldReturnNoResultsMessageForUnknownUser()
+    public void GetAverageScore_ShouldThrowErrorForUnknownUser()
     {
-        ResultManager resultManager = new ResultManager();
+        string unknownUser = "UnknownUser";
 
-       
-        Assert.Throws<Exception>(() => resultManager.GetAverageScore("David"));
+        Assert.Throws<Exception>(() => resultManager.GetAverageScore(unknownUser));
     }
 
     [Test]
-    public void AddResult_ShouldHandleMultipleUsers()
+    public void PrintUserResults_ShouldPrintResultsForExistingUser()
     {
-        ResultManager resultManager = new ResultManager();
+        string userName = "User3";
+        var questions = new List<CheckboxQuestion>(); 
+        var test = new Test("Test3", questions);
 
-        resultManager.AddResult("Alice", 100);
-        resultManager.AddResult("Bob", 50);
+        resultManager.AddTest(userName, test);
+        Assert.DoesNotThrow(() => resultManager.PrintUserResults(userName));
+    }
 
-        double aliceAverage = resultManager.GetAverageScore("Alice");
-        double bobAverage = resultManager.GetAverageScore("Bob");
-
-        Assert.That(aliceAverage, Is.EqualTo(100.0));
-        Assert.That(bobAverage, Is.EqualTo(50.0));
+    [Test]
+    public void PrintUserResults_ShouldShowNoResultsForUnknownUser()
+    {
+        string unknownUser = "UnknownUser";
+        Assert.DoesNotThrow(() => resultManager.PrintUserResults(unknownUser));
     }
 }
-
