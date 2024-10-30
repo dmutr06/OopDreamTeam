@@ -22,15 +22,15 @@ public class TestTest
     [Test]
     public void CheckAnswers_ShouldReturn1()
     {
-        test.AddAnswer(new List<bool> { true, false }, 0);
+        test.SetAnswer(new List<bool> { true, false }, 0);
         Assert.That(test.CheckAnswers(), Is.EqualTo(1.0));
     }
 
     [Test]
-    public void AddAnswer_ShouldThrowError()
+    public void SetAnswer_ShouldThrowError()
     {
         Assert.Throws<IndexOutOfRangeException>(
-            () => test.AddAnswer(new List<bool>(), 1)
+            () => test.SetAnswer(new List<bool>(), 1)
         );
     }
 
