@@ -2,6 +2,6 @@
 {
     static void Main(string[] args)
     {
-        OopDreamTeam.Tests.TestTest.Run(); // DJNVKDJNFV
+      Console.WriteLine("Hello, world");
     }
 }
