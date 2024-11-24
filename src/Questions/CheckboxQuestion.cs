@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace OopDreamTeam
 {
-    public class CheckboxQuestion
+    public class CheckboxQuestion : BaseQuestion
     {
         public class Option
         {
-            public readonly string Text;
-            public readonly bool IsRight;
+            public string Text { get; }
+            public bool IsRight { get; }
 
             public Option(string text, bool isRight)
             {
@@ -18,15 +18,12 @@ namespace OopDreamTeam
             }
         }
 
-        public readonly string Text;
-        public readonly double Score;
-        public readonly List<Option> Options;
+        public List<Option> Options { get; }
         private readonly bool strictGrading;
 
         public CheckboxQuestion(string text, double score, List<Option> options, bool strictGrading)
+            : base(text, score)
         {
-            Text = text ?? throw new ArgumentNullException(nameof(text), "Question text cannot be null.");
-            Score = score;
             Options = options ?? throw new ArgumentNullException(nameof(options), "Options cannot be null.");
             this.strictGrading = strictGrading;
 
@@ -34,9 +31,12 @@ namespace OopDreamTeam
                 throw new InvalidOperationException("At least one correct answer is required.");
         }
 
-        public double CheckAnswer(List<bool> userAnswer)
+        public override double CheckAnswer(object userAnswer)
         {
-            if (userAnswer.Count != Options.Count)
+            if (userAnswer is not List<bool> userAnswerList)
+                throw new ArgumentException("Answer must be a List<bool> matching the options.");
+
+            if (userAnswerList.Count != Options.Count)
                 throw new ArgumentException("The number of answers provided does not match the number of options.");
 
             double pmax = Score;
@@ -49,7 +49,7 @@ namespace OopDreamTeam
 
             for (int i = 0; i < Options.Count; i++)
             {
-                if (userAnswer[i])
+                if (userAnswerList[i])
                 {
                     if (Options[i].IsRight)
                         n++;
