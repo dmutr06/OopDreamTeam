@@ -15,6 +15,6 @@ namespace OopDreamTeam
             Score = score;
         }
 
-        public abstract double CheckAnswer(List<int> userAnswerIndices);
+        public abstract double CheckAnswer(object userAnswer);
     }
 }
