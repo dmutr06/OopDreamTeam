@@ -33,13 +33,13 @@ public class SingleChoiceQuestion : BaseQuestion
             throw new InvalidOperationException("There must be exactly one correct answer.");
     }
 
-    public override double CheckAnswer(object userAnswer)
+    public override double CheckAnswer()
     {
-        if (userAnswer is not int userAnswerIndex)
-            throw new ArgumentException("Answer must be an integer representing the option index.");
+        if (UserAnswer is not int userAnswerIndex)
+            throw new InvalidOperationException("No valid answer has been saved or it is not an integer.");
 
         if (userAnswerIndex < 0 || userAnswerIndex >= Options.Count)
-            throw new ArgumentOutOfRangeException(nameof(userAnswer), "Selected option is out of range.");
+            throw new ArgumentOutOfRangeException(nameof(UserAnswer), "Selected option is out of range.");
 
         return Options[userAnswerIndex].IsCorrect ? Score : 0;
     }

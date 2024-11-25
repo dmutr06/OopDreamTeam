@@ -30,10 +30,10 @@ public class OrderingQuestion : BaseQuestion
         this.gradingMode = gradingMode;
     }
 
-    public override double CheckAnswer(object userAnswer)
+    public override double CheckAnswer()
     {
-        if (userAnswer is not List<string> userOrder)
-            throw new ArgumentException("Answer must be a list of strings representing the ordered options.");
+        if (UserAnswer is not List<string> userOrder)
+            throw new InvalidOperationException("No valid answer has been saved or it is not a list of strings.");
 
         if (userOrder.Count != CorrectOrder.Count)
             throw new ArgumentException("The number of answers must match the number of options.");

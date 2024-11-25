@@ -35,10 +35,10 @@ public class MatchingQuestion : BaseQuestion
         this.strictGrading = strictGrading;
     }
 
-    public override double CheckAnswer(object userAnswer)
+    public override double CheckAnswer()
     {
-        if (userAnswer is not List<int> userAnswerIndices)
-            throw new ArgumentException("Answer must be a list of integers representing indices of matched pairs.");
+        if (UserAnswer is not List<int> userAnswerIndices)
+            throw new InvalidOperationException("No valid answer has been saved or it is not a list of integers.");
 
         if (userAnswerIndices.Count != Pairs.Count)
             throw new ArgumentException("The number of answers must match the number of pairs.");
@@ -49,7 +49,7 @@ public class MatchingQuestion : BaseQuestion
         {
             int rightIndex = userAnswerIndices[i];
             if (rightIndex < 0 || rightIndex >= Pairs.Count)
-                throw new ArgumentOutOfRangeException(nameof(userAnswer), "One or more indices are out of range.");
+                throw new ArgumentOutOfRangeException(nameof(UserAnswer), "One or more indices are out of range.");
 
             if (Pairs[rightIndex].Right == Pairs[i].Right)
                 correctPairs++;

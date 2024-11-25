@@ -11,10 +11,10 @@ public class InputTextQuestion : BaseQuestion
         CorrectAnswer = correctAnswer;
     }
 
-    public override double CheckAnswer(object userAnswer)
+    public override double CheckAnswer()
     {
-        if (userAnswer is not string userAnswerText)
-            throw new ArgumentException("Answer must be a string.");
+        if (UserAnswer is not string userAnswerText)
+            throw new InvalidOperationException("No valid answer has been saved or it is not a string.");
 
         return string.Equals(userAnswerText, CorrectAnswer, StringComparison.OrdinalIgnoreCase) ? Score : 0;
     }

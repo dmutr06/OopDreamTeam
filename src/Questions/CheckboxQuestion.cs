@@ -30,12 +30,10 @@ public class CheckboxQuestion : BaseQuestion
             throw new InvalidOperationException("At least one correct answer is required.");
     }
 
-    public override double CheckAnswer(object userAnswer)
+    public override double CheckAnswer()
     {
-        SaveAnswer(userAnswer);
-
-        if (userAnswer is not List<bool> userAnswerList)
-            throw new ArgumentException("Answer must be a List<bool> matching the options.");
+        if (UserAnswer is not List<bool> userAnswerList)
+            throw new InvalidOperationException("No valid answer has been saved.");
 
         if (userAnswerList.Count != Options.Count)
             throw new ArgumentException("The number of answers provided does not match the number of options.");

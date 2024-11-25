@@ -11,9 +11,9 @@ namespace OopDreamTeam.Tests
         public void InputTextQuestion_Correct()
         {
             var question = new InputTextQuestion("Sample Question", 10, "Correct Answer");
-            var userAnswer = "cORRect ansWeR";
+            question.UserAnswer = "cORRect ansWeR";
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(10, score);
         }
@@ -22,9 +22,9 @@ namespace OopDreamTeam.Tests
         public void InputTextQuestion_Incorrect()
         {
             var question = new InputTextQuestion("Sample Question", 10, "Correct Answer");
-            var userAnswer = "Wrong Answer";
+            question.UserAnswer = "Wrong Answer";
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(0, score);
         }
@@ -39,9 +39,9 @@ namespace OopDreamTeam.Tests
                 new SingleChoiceQuestion.Option("Option3", false)
             };
             var question = new SingleChoiceQuestion("Sample Question", 5, options);
-            int userAnswer = 1;
+            question.UserAnswer = 1;
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(5, score);
         }
@@ -56,9 +56,9 @@ namespace OopDreamTeam.Tests
                 new SingleChoiceQuestion.Option("Option3", false)
             };
             var question = new SingleChoiceQuestion("Sample Question", 5, options);
-            int userAnswer = 0;
+            question.UserAnswer = 0;
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(0, score);
         }
@@ -73,9 +73,9 @@ namespace OopDreamTeam.Tests
                 new CheckboxQuestion.Option("Option3", false)
             };
             var question = new CheckboxQuestion("Sample Question", 10, options, true);
-            var userAnswer = new List<bool> { true, true, false };
+            question.UserAnswer = new List<bool> { true, true, false };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(10, score);
         }
@@ -90,9 +90,9 @@ namespace OopDreamTeam.Tests
                 new CheckboxQuestion.Option("Option3", false)
             };
             var question = new CheckboxQuestion("Sample Question", 10, options, true);
-            var userAnswer = new List<bool> { false, true, false };
+            question.UserAnswer = new List<bool> { false, true, false };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(0, score);
         }
@@ -109,9 +109,9 @@ namespace OopDreamTeam.Tests
                 new CheckboxQuestion.Option("Option5", false)
             };
             var question = new CheckboxQuestion("Sample Question", 10, options, false);
-            var userAnswer = new List<bool> { true, false, true, true, true };
+            question.UserAnswer = new List<bool> { true, false, true, true, true };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(3.33, score, 0.01);
         }
@@ -128,9 +128,9 @@ namespace OopDreamTeam.Tests
                 new CheckboxQuestion.Option("Option5", false)
             };
             var question = new CheckboxQuestion("Sample Question", 10, options, false);
-            var userAnswer = new List<bool> { true, true, true, true, true };
+            question.UserAnswer = new List<bool> { true, true, true, true, true };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(0, score);
         }
@@ -145,9 +145,9 @@ namespace OopDreamTeam.Tests
                 new MatchingQuestion.Pair("Left3", "Right3")
             };
             var question = new MatchingQuestion("Sample Question", 10, pairs, true);
-            var userAnswer = new List<int> { 0, 1, 2 };
+            question.UserAnswer = new List<int> { 0, 1, 2 };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(10, score);
         }
@@ -162,9 +162,9 @@ namespace OopDreamTeam.Tests
                 new MatchingQuestion.Pair("Left3", "Right3")
             };
             var question = new MatchingQuestion("Sample Question", 10, pairs, true);
-            var userAnswer = new List<int> { 0, 2, 1 };
+            question.UserAnswer = new List<int> { 0, 2, 1 };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(0, score);
         }
@@ -182,9 +182,9 @@ namespace OopDreamTeam.Tests
                 new MatchingQuestion.Pair("Left6", "Right6")
             };
             var question = new MatchingQuestion("Sample Question", 10, pairs, false);
-            var userAnswer = new List<int> { 5, 1, 2, 3, 4, 0 };
+            question.UserAnswer = new List<int> { 5, 1, 2, 3, 4, 0 };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(6.67, score, 0.01);
         }
@@ -202,9 +202,9 @@ namespace OopDreamTeam.Tests
                 new MatchingQuestion.Pair("Left6", "Right6")
             };
             var question = new MatchingQuestion("Sample Question", 10, pairs, false);
-            var userAnswer = new List<int> { 5, 4, 3, 2, 1, 0 };
+            question.UserAnswer = new List<int> { 5, 4, 3, 2, 1, 0 };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(0, score);
         }
@@ -214,9 +214,9 @@ namespace OopDreamTeam.Tests
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3" };
             var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.Strict);
-            var userAnswer = new List<string> { "Option1", "Option2", "Option3" };
+            question.UserAnswer = new List<string> { "Option1", "Option2", "Option3" };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(10, score);
         }
@@ -226,9 +226,9 @@ namespace OopDreamTeam.Tests
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3" };
             var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.Strict);
-            var userAnswer = new List<string> { "Option1", "Option3", "Option2" };
+            question.UserAnswer = new List<string> { "Option1", "Option3", "Option2" };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(0, score);
         }
@@ -238,9 +238,9 @@ namespace OopDreamTeam.Tests
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3", "Option4", "Option5", "Option6" };
             var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.NotStrict);
-            var userAnswer = new List<string> { "Option6", "Option2", "Option1", "Option3", "Option4", "Option5" };
+            question.UserAnswer = new List<string> { "Option6", "Option2", "Option1", "Option3", "Option4", "Option5" };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(1.67, score, 0.01);
         }
@@ -250,9 +250,9 @@ namespace OopDreamTeam.Tests
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3", "Option4", "Option5", "Option6" };
             var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.Lenient);
-            var userAnswer = new List<string> { "Option6", "Option2", "Option1", "Option3", "Option4", "Option5" };
+            question.UserAnswer = new List<string> { "Option6", "Option2", "Option1", "Option3", "Option4", "Option5" };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(6, score);
         }
@@ -262,9 +262,9 @@ namespace OopDreamTeam.Tests
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3", "Option4", "Option5", "Option6" };
             var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.Lenient);
-            var userAnswer = new List<string> { "Option6", "Option5", "Option4", "Option3", "Option2", "Option1" };
+            question.UserAnswer = new List<string> { "Option6", "Option5", "Option4", "Option3", "Option2", "Option1" };
 
-            double score = question.CheckAnswer(userAnswer);
+            double score = question.CheckAnswer();
 
             Assert.AreEqual(0, score);
         }
