@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace OopDreamTeam
+namespace OopDreamTeam;
+public abstract class BaseQuestion
 {
-    public abstract class BaseQuestion
+    public string Text { get; set; }
+    public double Score { get; set; }
+    public object? UserAnswer { get;  set; }
+
+    protected BaseQuestion(string text, double score)
     {
-        public string Text { get; set; }
-        public double Score { get; set; }
-
-        protected BaseQuestion(string text, double score)
-        {
-            Text = text ?? throw new ArgumentNullException(nameof(text), "Question text cannot be null.");
-            Score = score;
-        }
-
-        public abstract double CheckAnswer(object userAnswer);
+        Text = text;
+        Score = score;
     }
+
+    public void SaveAnswer(object userAnswer)
+    {
+        UserAnswer = userAnswer;
+    }
+
+    public abstract double CheckAnswer();
 }
