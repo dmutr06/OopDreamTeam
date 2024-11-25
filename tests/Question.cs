@@ -213,7 +213,7 @@ namespace OopDreamTeam.Tests
         public void OrderingQuestion_AllCorrect_StrictGrading()
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3" };
-            var question = new OrderingQuestion("Sample Question", 10, correctOrder, "strict");
+            var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.Strict);
             var userAnswer = new List<string> { "Option1", "Option2", "Option3" };
 
             double score = question.CheckAnswer(userAnswer);
@@ -225,7 +225,7 @@ namespace OopDreamTeam.Tests
         public void OrderingQuestion_OnlyOneCorrect_StrictGrading()
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3" };
-            var question = new OrderingQuestion("Sample Question", 10, correctOrder, "strict");
+            var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.Strict);
             var userAnswer = new List<string> { "Option1", "Option3", "Option2" };
 
             double score = question.CheckAnswer(userAnswer);
@@ -237,7 +237,7 @@ namespace OopDreamTeam.Tests
         public void OrderingQuestion_PartialCorrect_NotStrictGrading()
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3", "Option4", "Option5", "Option6" };
-            var question = new OrderingQuestion("Sample Question", 10, correctOrder, "not-strict");
+            var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.NotStrict);
             var userAnswer = new List<string> { "Option6", "Option2", "Option1", "Option3", "Option4", "Option5" };
 
             double score = question.CheckAnswer(userAnswer);
@@ -249,7 +249,7 @@ namespace OopDreamTeam.Tests
         public void OrderingQuestion_SameAnswerPartialCorrect_LenientGrading()
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3", "Option4", "Option5", "Option6" };
-            var question = new OrderingQuestion("Sample Question", 10, correctOrder, "lenient");
+            var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.Lenient);
             var userAnswer = new List<string> { "Option6", "Option2", "Option1", "Option3", "Option4", "Option5" };
 
             double score = question.CheckAnswer(userAnswer);
@@ -261,7 +261,7 @@ namespace OopDreamTeam.Tests
         public void OrderingQuestion_AllIncorrect_LenientGrading()
         {
             var correctOrder = new List<string> { "Option1", "Option2", "Option3", "Option4", "Option5", "Option6" };
-            var question = new OrderingQuestion("Sample Question", 10, correctOrder, "lenient");
+            var question = new OrderingQuestion("Sample Question", 10, correctOrder, OrderingQuestion.GradingMode.Lenient);
             var userAnswer = new List<string> { "Option6", "Option5", "Option4", "Option3", "Option2", "Option1" };
 
             double score = question.CheckAnswer(userAnswer);
