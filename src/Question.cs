@@ -1,6 +1,5 @@
-﻿using System;
+﻿namespace OopDreamTeam;
 
-namespace OopDreamTeam;
 public abstract class BaseQuestion
 {
     public string Text { get; set; }
