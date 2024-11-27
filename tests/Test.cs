@@ -4,8 +4,8 @@ using NUnit.Framework;
 
 public class TestTest
 {
-    private Test test = new Test(string.Empty, new List<CheckboxQuestion>());
-    private List<CheckboxQuestion> questions = new List<CheckboxQuestion>
+    private Test test = new Test(string.Empty, new List<CheckboxQuestion>(), new MockTestRunner());
+    private BaseQuestion[] questions = 
     {
         new CheckboxQuestion(
             "question", 2,
@@ -14,24 +14,34 @@ public class TestTest
                 new CheckboxQuestion.Option("1 option", true),
                 new CheckboxQuestion.Option("2 option", true),
             }, false),
+        new InputTextQuestion("text question", 2, "answer"),
+        new SingleChoiceQuestion("single choice question", 3, new List<SingleChoiceQuestion.Option> 
+                {
+                    new SingleChoiceQuestion.Option("option 1", true),
+                    new SingleChoiceQuestion.Option("option 2", false),
+                    new SingleChoiceQuestion.Option("option 3", false),
+                }), 
     };
 
     [SetUp]
-    public void Setup() => test = new Test("test", questions);
-
-    [Test]
-    public void CheckAnswers_ShouldReturn1()
+    public void Setup()
     {
-        test.SetAnswer(new List<bool> { true, false }, 0);
-        Assert.That(test.CheckAnswers(), Is.EqualTo(1.0));
+        test = new Test("test", questions, new MockTestRunner());
+        test.Start();
     }
 
     [Test]
     public void SetAnswer_ShouldThrowError()
     {
-        Assert.Throws<IndexOutOfRangeException>(
-            () => test.SetAnswer(new List<bool>(), 1)
+        Assert.Throws<TestBadQuestionIndexException>(
+            () => test.SetAnswer(0, 3)
         );
+    }
+
+    [Test]
+    public void CheckAnswers_ShouldReturn7()
+    {
+        Assert.That(test.CheckAnswers(), Is.EqualTo(7));
     }
 
     [Test]
