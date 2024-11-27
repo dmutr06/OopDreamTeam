@@ -34,6 +34,8 @@ public class Test
     { 
         get
         {
+            if (state != State.Checked)
+                throw new TestNotCheckedException();
             return endTime - startTime;
         }
     }
@@ -89,9 +91,14 @@ public class Test
 
     public void Shuffle()
     {
-        Random rand = new Random();
         if (state != State.Created)
             throw new TestStateException("Can't shuffle questions");
-        results = results.OrderBy(_ => rand.Next()).ToArray();
+
+        Random rand = new Random();
+        for (int i = results.Length - 1; i > 0; --i)
+        {
+            int j = rand.Next(i + 1);
+            (results[i], results[j]) = (results[j], results[i]);
+        }
     }
 }
