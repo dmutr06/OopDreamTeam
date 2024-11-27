@@ -1,14 +1,25 @@
 namespace OopDreamTeam;
 
-public class TestCheckedException : Exception {}
 public class TestBadQuestionIndexException : Exception {}
-public class TestNotCompletedException : Exception {}
-public class TestNotCheckedException: Exception {}
+
+public class TestStateException : Exception
+{
+    public TestStateException(string message) : base(message) {}
+}
+
+public class TestNotCompletedException : TestStateException {
+    public TestNotCompletedException() : base("Test is not completed") {}
+}
+
+public class TestNotCheckedException : TestStateException {
+    public TestNotCheckedException() : base("Test is not checked") {}
+}
 
 public class Test
 {
     private enum State
     {
+        Created,
         InProgress,
         Completed,
         Checked
@@ -16,6 +27,16 @@ public class Test
 
     public readonly string Name;
     private (BaseQuestion Question, double Score)[] results;
+    private DateTime startTime;
+    private DateTime endTime;
+
+    public TimeSpan TestDuration 
+    { 
+        get
+        {
+            return endTime - startTime;
+        }
+    }
 
     private State state;
 
@@ -23,17 +44,25 @@ public class Test
     {
         Name = name;
         results = questions.Select(q => (q, 0.0)).ToArray();
+        state = State.Created;
+    }
+
+    public void StartTest()
+    {
+        if (state != State.Created)
+            throw new TestStateException("Test is already started");
         state = State.InProgress;
+        startTime = DateTime.Now;
     }
 
     public void SetAnswer(object answer, int idx)
     {
-        if (state == State.Checked)
-            throw new TestCheckedException();
+        if (state == State.Checked || state == State.Created)
+            throw new TestStateException("Can't set answer");
         if (idx >= results.Length)
             throw new TestBadQuestionIndexException();
         
-        results[idx].Question.SaveAnswer(answer);
+        results[idx].Question.UserAnswer = answer;
 
         if (results.All(r => r.Question.UserAnswer != null))
             state = State.Completed;
@@ -47,6 +76,7 @@ public class Test
             throw new TestNotCompletedException();
 
         state = State.Checked;
+        endTime = DateTime.Now;
         return results.Sum(r => r.Score = r.Question.CheckAnswer());
     }
 
@@ -55,5 +85,13 @@ public class Test
         if (state != State.Checked)
             throw new TestNotCheckedException();
         return results; 
+    }
+
+    public void Shuffle()
+    {
+        Random rand = new Random();
+        if (state != State.Created)
+            throw new TestStateException("Can't shuffle questions");
+        results = results.OrderBy(_ => rand.Next()).ToArray();
     }
 }
