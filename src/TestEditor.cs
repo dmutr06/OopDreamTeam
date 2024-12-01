@@ -1,3 +1,6 @@
+using System.Text.Json;
+using Newtonsoft.Json;
+
 namespace OopDreamTeam
 {
     public class TestEditor
@@ -53,6 +56,60 @@ namespace OopDreamTeam
             else
             {
                 throw new KeyNotFoundException($"Test '{testName}' was not found");
+            }
+        }
+
+        public void SortTests()
+        {
+            testNames.Sort();
+        }
+
+        public List<string> SearchTests(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return testNames;
+            }
+            return testNames.Where(name => keyword.Split(' ',
+                StringSplitOptions.RemoveEmptyEntries).Any(word => name.Contains(word,
+                StringComparison.OrdinalIgnoreCase))).ToList();
+
+        }
+
+        public void SaveToFile(string fileName)
+        {
+            try
+            {
+                var serializedTests = JsonConvert.SerializeObject(tests, Formatting.Indented,
+                    new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+                File.WriteAllText(fileName, serializedTests);
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Error saving to file: '{fileName}'", ex);
+            }
+        }
+
+        public void LoadFromFile(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                try
+                {
+                    var serializedTests = File.ReadAllText(fileName);
+                    tests = JsonConvert.DeserializeObject<Dictionary<string, List<CheckboxQuestion>>>(serializedTests,
+                        new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+
+                    testNames = new List<string>(tests.Keys);
+                }
+                catch (JsonSerializationException ex)
+                {
+                    throw new InvalidDataException($"Error deserializing data from file: '{fileName}'", ex);
+                }
+            }
+            else
+            {
+                throw new FileNotFoundException($"File '{fileName}' was not found");
             }
         }
     }
