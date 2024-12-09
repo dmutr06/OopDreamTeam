@@ -12,10 +12,5 @@ public abstract class BaseQuestion
         Score = score;
     }
 
-    public void SaveAnswer(object userAnswer)
-    {
-        UserAnswer = userAnswer;
-    }
-
     public abstract double CheckAnswer();
 }
