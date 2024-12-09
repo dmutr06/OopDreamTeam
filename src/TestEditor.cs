@@ -112,5 +112,87 @@ namespace OopDreamTeam
                 throw new FileNotFoundException($"File '{fileName}' was not found");
             }
         }
+
+        public void EditQuestion(string testName, int questionIndex, string newQuestionText)
+        {
+            if (tests.ContainsKey(testName))
+            {
+                if (questionIndex >= 0 && questionIndex < tests[testName].Count)
+                {
+                    tests[testName][questionIndex].Text = newQuestionText;
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException("An invalid question index was specified");
+                }
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Test '{testName}' was not found");
+            }
+        }
+
+        public void AddAnswerOption(string testName, int questionIndex, string answerText, bool isCorrect)
+        {
+            if (tests.ContainsKey(testName)) 
+            {
+                if (questionIndex >= 0 && questionIndex < tests[testName].Count)
+                {
+                    var question = tests[testName][questionIndex];
+
+                    if (question is CheckboxQuestion checkboxQuestion)
+                    {
+                        checkboxQuestion.Options.Add(new CheckboxQuestion.Option(answerText, isCorrect));
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("This question is not a CheckboxQuestion");
+                    }
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException("An invalid question index was specified"); 
+                }
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Test '{testName}' was not found.");
+            }
+        }
+
+        public void RemoveAnswerOption(string testName, int questionIndex, int optionIndex)
+        {
+            if (tests.ContainsKey(testName))
+            {
+                if (questionIndex >= 0 && questionIndex < tests[testName].Count)
+                {
+                    var question = tests[testName][questionIndex];
+
+                    if (question is CheckboxQuestion checkboxQuestion)
+                    {
+                        if (optionIndex >= 0 && optionIndex < checkboxQuestion.Options.Count)
+                        {
+                            checkboxQuestion.Options.RemoveAt(optionIndex);
+                        }
+                        else
+                        {
+                            throw new IndexOutOfRangeException("An invalid answer index was specified");
+                        }
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("This question is not a CheckboxQuestion"); 
+                    }
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException("An invalid question index was specified"); 
+                }
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Test '{testName}' was not found"); 
+            }
+        }
     }
 }
